@@ -1,0 +1,41 @@
+name: Build and push Docker image
+on:
+  push:
+    paths:
+    - ci/*
+    - .github/workflows/*
+  pull_request:
+
+jobs:
+  build-and-push-docker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Set Job Environment Variables"
+      run: |
+        SHA7="${GITHUB_SHA::7}"
+        DOCKER_TAG=$SHA7
+        echo $DOCKER_TAG > docker-tag.txt
+        echo "DOCKER_TAG=${DOCKER_TAG}" >> $GITHUB_ENV
+
+    - name: Upload docker tag
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-tag
+        path: docker-tag.txt
+
+    - name: "Build and Publish to DockerHub"
+      uses: elgohr/Publish-Docker-Github-Action@2.12
+      with:
+        name: betolink/py-rocker
+        username: openscapes
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        workdir: ci
+        tags: "main, ${{env.DOCKER_TAG}}"
+
+    - name: Export Full Conda Environment
+      run: |
+          docker run openscapes/pyrocker:main conda list --export

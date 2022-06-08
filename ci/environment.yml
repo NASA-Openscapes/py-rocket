@@ -1,0 +1,8 @@
+name: openscapes
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pangeo-notebook
+  - xarray
+  - earthdata>=0.3.1
