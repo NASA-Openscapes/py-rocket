@@ -2,7 +2,7 @@ FROM rocker/geospatial:4.2
 
 ENV CONDA_ENV=notebook \
     DEBIAN_FRONTEND=noninteractive \
-    NB_USER=jovyan \
+    NB_USER=rstudio \
     SHELL=/bin/bash \
     # Setup locale to be UTF-8, avoiding gnarly hard to debug encoding errors
     LANG=C.UTF-8  \
@@ -26,7 +26,6 @@ ENV PATH=${NB_PYTHON_PREFIX}/bin:${CONDA_DIR}/bin:${PATH}
 # to ${CONDA_DIR}/etc but not to /etc
 ENV DASK_ROOT_CONFIG=${CONDA_DIR}/etc
 
-RUN useradd --create-home jovyan
 RUN usermod -aG sudo ${NB_USER} && chown -R ${NB_USER}:${NB_USER} /srv
 
 # bin to PATH earlier ($NB_PYTHON_PREFIX/bin)
@@ -34,7 +33,7 @@ RUN echo ". ${CONDA_DIR}/etc/profile.d/conda.sh ; conda activate ${CONDA_ENV}" >
 
 USER ${NB_USER}
 
-COPY --chown=jovyan:jovyan . /tmp/build
+COPY --chown=rstudio:rstudio . /tmp/build
 
 WORKDIR /tmp/build
 
