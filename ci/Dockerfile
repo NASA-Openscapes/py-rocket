@@ -67,6 +67,9 @@ RUN echo "Checking for 'conda-linux-64.lock' or 'environment.yml'..." \
         ; fi
 
 RUN pip install jupyter-rsession-proxy
+
+WORKDIR ${HOME}
+
 EXPOSE 8888
 
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--no-browser"]
