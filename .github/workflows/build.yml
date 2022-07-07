@@ -30,12 +30,12 @@ jobs:
     - name: "Build and Publish to DockerHub"
       uses: elgohr/Publish-Docker-Github-Action@2.12
       with:
-        name: betolink/py-rocker
-        username: betolink
+        name: openscapes/rocker
+        username: openscapes
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         workdir: ci
         tags: "main, ${{env.DOCKER_TAG}}"
 
     - name: Export Full Conda Environment
       run: |
-          docker run betolink/py-rocker:main conda list --export
+          docker run openscapes/rocker:main conda list --export
